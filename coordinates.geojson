@@ -1,0 +1,71 @@
+{
+  "type": "FeatureCollection",
+  "name": "ranh_gioi_khuon_vien",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ranh giới khuôn viên nghĩa trang Nguyễn Văn Tộc",
+        "area_m2": 378.90,
+        "perimeter_m": 95.87,
+        "origin_point": "Điểm 1 (15.970804, 108.190811)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [108.190811, 15.970804],
+            [108.190742, 15.970851],
+            [108.190833, 15.970976],
+            [108.190870, 15.970973],
+            [108.190912, 15.970785],
+            [108.190839, 15.970686],
+            [108.190716, 15.970672],
+            [108.190811, 15.970804]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 1, "name": "Điểm 1 (Gốc)", "dx_m": 0.0, "dy_m": 0.0, "dms": "15°58'14.9\"N 108°11'26.9\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190811, 15.970804] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 2, "name": "Điểm 2", "dx_m": -7.372, "dy_m": 5.162, "dms": "15°58'15.1\"N 108°11'26.7\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190742, 15.970851] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 3, "name": "Điểm 3", "dx_m": 2.378, "dy_m": 19.088, "dms": "15°58'15.5\"N 108°11'27.0\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190833, 15.970976] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 4, "name": "Điểm 4", "dx_m": 6.363, "dy_m": 18.739, "dms": "15°58'15.5\"N 108°11'27.1\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190870, 15.970973] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 5, "name": "Điểm 5", "dx_m": 10.773, "dy_m": -2.050, "dms": "15°58'14.8\"N 108°11'27.3\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190912, 15.970785] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 6, "name": "Điểm 6", "dx_m": 3.029, "dy_m": -13.108, "dms": "15°58'14.5\"N 108°11'27.0\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190839, 15.970686] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": 7, "name": "Điểm 7", "dx_m": -10.210, "dy_m": -14.581, "dms": "15°58'14.4\"N 108°11'26.6\"E" },
+      "geometry": { "type": "Point", "coordinates": [108.190716, 15.970672] }
+    }
+  ]
+}

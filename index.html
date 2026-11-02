@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc - Giáng Đông, Hòa Xuân, Đà Nẵng</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #0f172a;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-sidebar: #ffffff;
+      --bg-header: #0f172a;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text-main);
+      background-color: #f8fafc;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header Bar */
+    header {
+      background-color: var(--bg-header);
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #3b82f6, #10b981);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 18px;
+    }
+
+    .brand-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-title p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-crs {
+      background-color: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #e2e8f0;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border-color: rgba(255,255,255,0.25);
+      color: white;
+    }
+    .btn-outline:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    /* Main Container */
+    .app-body {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 61px);
+      position: relative;
+    }
+
+    /* Sidebar */
+    aside {
+      width: 400px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      z-index: 500;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.03);
+    }
+
+    .panel-section {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .stat-card {
+      background-color: #f1f5f9;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-color: #bfdbfe;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    .stat-value {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Toggles Grid */
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Points List */
+    .points-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .point-item {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .point-item:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .point-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .point-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: #ef4444;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .point-badge.first {
+      background-color: #10b981;
+    }
+
+    .point-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .point-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .point-offsets {
+      font-size: 11px;
+      font-weight: 600;
+      color: #2563eb;
+      font-family: monospace;
+    }
+
+    .point-coords {
+      font-size: 11px;
+      color: #64748b;
+      font-family: monospace;
+    }
+
+    .point-dms {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .point-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #475569;
+      transition: 0.15s;
+    }
+
+    .btn-icon:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Map Container */
+    #map {
+      flex: 1;
+      height: 100%;
+      z-index: 10;
+      background: #e5e7eb;
+    }
+
+    /* Leaflet Custom Markers */
+    .custom-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      border: 2px solid white;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform 0.2s;
+    }
+
+    .custom-marker:hover {
+      transform: scale(1.2);
+      z-index: 9999 !important;
+    }
+
+    .custom-marker.first {
+      background-color: #10b981;
+    }
+
+    .edge-label {
+      background: rgba(15, 23, 42, 0.88);
+      color: #ffffff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+
+    .coords-bar {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: monospace;
+      z-index: 1000;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    /* Export buttons */
+    .export-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-export {
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: white;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-export:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">GIS</div>
+      <div class="brand-title">
+        <h1>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc</h1>
+        <p>Giáng Đông, Hòa Xuân, Đà Nẵng</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="badge-crs">7 Điểm Mốc Tọa Độ</span>
+      <button class="btn btn-outline" id="btn-fit-bounds" title="Căn chỉnh toàn cảnh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+        Toàn cảnh
+      </button>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="app-body">
+    <!-- Sidebar -->
+    <aside>
+      <!-- Thống kê diện tích & chu vi -->
+      <div class="panel-section">
+        <div class="panel-title">
+          <span>Thông Số Ranh Giới</span>
+          <span style="font-size: 10px; font-weight: normal; color: #10b981; background: #ecfdf5; padding: 2px 6px; border-radius: 4px;">Chuẩn thực địa</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card highlight">
+            <div class="stat-label">Diện Tích</div>
+            <div class="stat-value" id="stat-area">378,9 m²</div>
+            <div class="stat-sub">~ 0.76 sào Trung Bộ (0.0379 ha)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Chu Vi Ranh Giới</div>
+            <div class="stat-value" id="stat-perimeter">95.9 m</div>
+            <div class="stat-sub">7 cạnh khép kín</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tùy chọn hiển thị -->
+      <div class="panel-section">
+        <div class="panel-title">Tùy Chọn Hiển Thị</div>
+        <div class="toggle-grid">
+          <label class="toggle-item">
+            <input type="checkbox" id="toggle-polygon" checked> Tô màu ranh giới
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="toggle-markers" checked> Điểm mốc (Markers)
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="toggle-edge-lengths" checked> Chiều dài cạnh (m)
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="toggle-labels" checked> Tên điểm mốc
+          </label>
+        </div>
+      </div>
+
+      <!-- Danh sách tọa độ 7 điểm -->
+      <div class="panel-section" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="panel-title">
+          <span>Danh Sách 7 Điểm Mốc Tọa Độ</span>
+          <span style="font-size: 11px; text-transform: none; color: #3b82f6; cursor: pointer;" id="btn-copy-all">Sao chép tất cả</span>
+        </div>
+        <div class="points-list" id="points-container">
+          <!-- Render bằng JS -->
+        </div>
+      </div>
+
+      <!-- Xuất dữ liệu -->
+      <div class="panel-section">
+        <div class="panel-title">Tải Về & Xuất File</div>
+        <div class="export-btns">
+          <button class="btn-export" id="btn-export-geojson">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Tải GeoJSON
+          </button>
+          <button class="btn-export" id="btn-export-kml">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Tải KML (Earth)
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map View -->
+    <div id="map"></div>
+
+    <!-- Tọa độ chuột -->
+    <div class="coords-bar" id="mouse-coords">
+      Lat: --.---- | Lon: ---.---- | Zoom: --
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast">Đã sao chép vào bộ nhớ tạm!</div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    // Dữ liệu 7 điểm tọa độ chuẩn hóa chính thức (WGS84 EPSG:4326)
+    const POINTS = [
+      { id: 1, name: "Điểm 1 (Gốc)", lat: 15.970804, lon: 108.190811, x: 0.0, y: 0.0, dms: `15°58'14.9"N 108°11'26.9"E`, note: "Điểm gốc đo đạc (0, 0)" },
+      { id: 2, name: "Điểm 2", lat: 15.970851, lon: 108.190742, x: -7.372, y: 5.162, dms: `15°58'15.1"N 108°11'26.7"E`, note: "Cạnh 1-2 dài 9.0m" },
+      { id: 3, name: "Điểm 3", lat: 15.970976, lon: 108.190833, x: 2.378, y: 19.088, dms: `15°58'15.5"N 108°11'27.0"E`, note: "Cạnh 2-3 dài 17.0m" },
+      { id: 4, name: "Điểm 4", lat: 15.970973, lon: 108.190870, x: 6.363, y: 18.739, dms: `15°58'15.5"N 108°11'27.1"E`, note: "Cạnh 3-4 dài 4.0m" },
+      { id: 5, name: "Điểm 5", lat: 15.970785, lon: 108.190912, x: 10.773, y: -2.050, dms: `15°58'14.8"N 108°11'27.3"E`, note: "Cạnh 4-5 dài 21.25m" },
+      { id: 6, name: "Điểm 6", lat: 15.970686, lon: 108.190839, x: 3.029, y: -13.108, dms: `15°58'14.5"N 108°11'27.0"E`, note: "Cạnh 5-6 dài 13.5m" },
+      { id: 7, name: "Điểm 7", lat: 15.970672, lon: 108.190716, x: -10.210, y: -14.581, dms: `15°58'14.4"N 108°11'26.6"E`, note: "Cạnh 6-7 dài 13.32m, Cạnh 7-1 dài 17.8m" }
+    ];
+
+    // Map object & Layers
+    let map;
+    let polygonLayer = null;
+    let markersLayer = L.layerGroup();
+    let edgeLabelsLayer = L.layerGroup();
+
+    // Map base layers
+    const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+      maxZoom: 22,
+      attribution: '&copy; Google Maps'
+    });
+
+    const googleRoad = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      maxZoom: 22,
+      attribution: '&copy; Google Maps'
+    });
+
+    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: '&copy; Esri World Imagery'
+    });
+
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    // Hàm tính khoảng cách Geodesic
+    function calcDistance(lat1, lon1, lat2, lon2) {
+      const R = 6378137.0;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // Hàm tính diện tích Geodesic
+    function calcPolygonArea(coords) {
+      const R = 6378137.0;
+      let area = 0.0;
+      const n = coords.length;
+      if (n < 3) return 0;
+      for (let i = 0; i < n; i++) {
+        const p1 = coords[i];
+        const p2 = coords[(i + 1) % n];
+        const lat1 = p1.lat * Math.PI / 180;
+        const lon1 = p1.lon * Math.PI / 180;
+        const lat2 = p2.lat * Math.PI / 180;
+        const lon2 = p2.lon * Math.PI / 180;
+        area += (lon2 - lon1) * (2 + Math.sin(lat1) + Math.sin(lat2));
+      }
+      return Math.abs(area * R * R / 2.0);
+    }
+
+    // Danh sách thứ tự nối cố định theo chu vi sơ đồ: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+    function getOrderedPoints() {
+      const orderIds = [1, 2, 3, 4, 5, 6, 7];
+      return orderIds.map(id => POINTS.find(p => p.id === id));
+    }
+
+    // Khởi tạo bản đồ
+    function initMap() {
+      map = L.map('map', {
+        center: [POINTS[0].lat, POINTS[0].lon],
+        zoom: 20,
+        maxZoom: 22,
+        layers: [googleHybrid]
+      });
+
+      const baseMaps = {
+        "Google Vệ Tinh (Hybrid)": googleHybrid,
+        "Google Bản Đồ (Streets)": googleRoad,
+        "Esri World Imagery": esriSat,
+        "OpenStreetMap (OSM)": osm
+      };
+      L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+      L.control.scale({ imperial: false, metric: true, position: 'bottomleft' }).addTo(map);
+
+      markersLayer.addTo(map);
+      edgeLabelsLayer.addTo(map);
+
+      map.on('mousemove', (e) => {
+        document.getElementById('mouse-coords').innerText =
+          `Lat: ${e.latlng.lat.toFixed(6)} | Lon: ${e.latlng.lng.toFixed(6)} | Zoom: ${map.getZoom()}`;
+      });
+
+      updateBoundary();
+      renderPointsList();
+      fitBoundaryBounds();
+    }
+
+    // Căn chỉnh toàn cảnh
+    function fitBoundaryBounds() {
+      const bounds = L.latLngBounds(POINTS.map(p => [p.lat, p.lon]));
+      map.fitBounds(bounds, { padding: [80, 80], maxZoom: 21 });
+    }
+
+    // Cập nhật ranh giới (Polygon & Nhãn cạnh)
+    function updateBoundary() {
+      const orderedPts = getOrderedPoints();
+
+      if (polygonLayer) map.removeLayer(polygonLayer);
+      edgeLabelsLayer.clearLayers();
+
+      const latlngs = orderedPts.map(p => [p.lat, p.lon]);
+
+      // Tính diện tích và chu vi
+      const area = calcPolygonArea(orderedPts);
+      let perimeter = 0;
+      for (let i = 0; i < orderedPts.length; i++) {
+        const next = (i + 1) % orderedPts.length;
+        perimeter += calcDistance(orderedPts[i].lat, orderedPts[i].lon, orderedPts[next].lat, orderedPts[next].lon);
+      }
+
+      document.getElementById('stat-area').innerText = `${area.toFixed(1)} m²`;
+      document.getElementById('stat-perimeter').innerText = `${perimeter.toFixed(1)} m`;
+
+      // Vẽ Polygon
+      const showPolygon = document.getElementById('toggle-polygon').checked;
+      polygonLayer = L.polygon(latlngs, {
+        color: '#2563eb',
+        weight: 3,
+        opacity: 0.9,
+        fillColor: '#3b82f6',
+        fillOpacity: showPolygon ? 0.35 : 0.0
+      }).addTo(map);
+
+      polygonLayer.bindPopup(`
+        <div style="font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.5;">
+          <strong style="color: #1e293b; font-size: 14px;">Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc</strong><br>
+          <span style="color: #64748b;">Giáng Đông, Hòa Xuân, Đà Nẵng</span>
+          <hr style="margin: 8px 0; border: none; border-top: 1px solid #e2e8f0;">
+          <b>Diện tích:</b> ${area.toFixed(1)} m² (~${(area / 500).toFixed(2)} sào)<br>
+          <b>Chu vi:</b> ${perimeter.toFixed(1)} m<br>
+          <b>Số đỉnh mốc:</b> 7 điểm
+        </div>
+      `);
+
+      // Vẽ nhãn chiều dài cạnh
+      const showEdges = document.getElementById('toggle-edge-lengths').checked;
+      if (showEdges) {
+        for (let i = 0; i < orderedPts.length; i++) {
+          const p1 = orderedPts[i];
+          const p2 = orderedPts[(i + 1) % orderedPts.length];
+          const dist = calcDistance(p1.lat, p1.lon, p2.lat, p2.lon);
+
+          const midLat = (p1.lat + p2.lat) / 2;
+          const midLon = (p1.lon + p2.lon) / 2;
+
+          const edgeIcon = L.divIcon({
+            className: 'edge-label-container',
+            html: `<div class="edge-label">${dist.toFixed(1)}m</div>`,
+            iconSize: [40, 20],
+            iconAnchor: [20, 10]
+          });
+
+          L.marker([midLat, midLon], { icon: edgeIcon, interactive: false }).addTo(edgeLabelsLayer);
+        }
+      }
+
+      renderMarkers();
+    }
+
+    // Vẽ markers
+    function renderMarkers() {
+      markersLayer.clearLayers();
+      const showMarkers = document.getElementById('toggle-markers').checked;
+      const showLabels = document.getElementById('toggle-labels').checked;
+      if (!showMarkers) return;
+
+      POINTS.forEach(p => {
+        const isFirst = p.id === 1;
+        const markerHtml = `
+          <div class="custom-marker ${isFirst ? 'first' : ''}" style="width: 28px; height: 28px;">
+            ${p.id}
+          </div>
+        `;
+
+        const icon = L.divIcon({
+          className: 'point-div-icon',
+          html: markerHtml,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -14]
+        });
+
+        const marker = L.marker([p.lat, p.lon], { icon }).addTo(markersLayer);
+
+        const popupContent = `
+          <div style="font-family: 'Inter', sans-serif; min-width: 210px; font-size: 13px;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              <span style="background: ${isFirst ? '#10b981' : '#ef4444'}; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px;">${p.id}</span>
+              <strong style="font-size: 14px; color: #0f172a;">${p.name}</strong>
+            </div>
+            <div style="color: #2563eb; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+              Độ lệch mét: ΔX: ${p.x >= 0 ? '+' : ''}${p.x.toFixed(2)}m | ΔY: ${p.y >= 0 ? '+' : ''}${p.y.toFixed(2)}m
+            </div>
+            <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;"><i>${p.note}</i></div>
+            <div style="color: #475569; font-size: 11px; margin-bottom: 4px;"><b>DMS:</b> ${p.dms}</div>
+            <div style="color: #475569; font-size: 11px; font-family: monospace; margin-bottom: 8px;"><b>Lat:</b> ${p.lat.toFixed(6)}<br><b>Lon:</b> ${p.lon.toFixed(6)}</div>
+            <button onclick="navigator.clipboard.writeText('${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}'); showToast('Đã copy tọa độ!');" style="width: 100%; padding: 6px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer;">Sao chép (Lat, Lon)</button>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent);
+
+        if (showLabels) {
+          marker.bindTooltip(`<b>${p.name}</b>`, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -12]
+          });
+        }
+      });
+    }
+
+    // Render danh sách tọa độ ở sidebar
+    function renderPointsList() {
+      const container = document.getElementById('points-container');
+      container.innerHTML = '';
+
+      POINTS.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'point-item';
+        item.id = `point-item-${p.id}`;
+
+        const isFirst = p.id === 1;
+
+        item.innerHTML = `
+          <div class="point-info">
+            <div class="point-badge ${isFirst ? 'first' : ''}">${p.id}</div>
+            <div class="point-details">
+              <div style="display: flex; align-items: baseline; gap: 6px;">
+                <span class="point-name">${p.name}</span>
+                <span class="point-offsets">(${p.x >= 0 ? '+' : ''}${p.x.toFixed(1)}m, ${p.y >= 0 ? '+' : ''}${p.y.toFixed(1)}m)</span>
+              </div>
+              <span class="point-coords">${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}</span>
+              <span class="point-dms">${p.dms}</span>
+            </div>
+          </div>
+          <div class="point-actions">
+            <button class="btn-icon" title="Sao chép tọa độ" onclick="event.stopPropagation(); copyCoord('${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+            <button class="btn-icon" title="Phóng to điểm" onclick="event.stopPropagation(); zoomToPoint(${p.lat}, ${p.lon})">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          zoomToPoint(p.lat, p.lon);
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    function zoomToPoint(lat, lon) {
+      map.flyTo([lat, lon], 21, { duration: 0.8 });
+    }
+
+    function copyCoord(text) {
+      navigator.clipboard.writeText(text);
+      showToast(`Đã sao chép: ${text}`);
+    }
+
+    // Sao chép toàn bộ
+    document.getElementById('btn-copy-all').addEventListener('click', () => {
+      let content = "STT\tTên\tΔX Đông (m)\tΔY Bắc (m)\tVĩ độ (Lat)\tKinh độ (Lon)\tTọa độ DMS\tGhi chú\n";
+      POINTS.forEach(p => {
+        content += `${p.id}\t${p.name}\t${p.x.toFixed(3)}\t${p.y.toFixed(3)}\t${p.lat.toFixed(6)}\t${p.lon.toFixed(6)}\t${p.dms}\t${p.note}\n`;
+      });
+      navigator.clipboard.writeText(content);
+      showToast("Đã sao chép bảng 7 điểm tọa độ!");
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Checkboxes toggles
+    document.getElementById('toggle-polygon').addEventListener('change', updateBoundary);
+    document.getElementById('toggle-markers').addEventListener('change', renderMarkers);
+    document.getElementById('toggle-labels').addEventListener('change', renderMarkers);
+    document.getElementById('toggle-edge-lengths').addEventListener('change', updateBoundary);
+
+    document.getElementById('btn-fit-bounds').addEventListener('click', fitBoundaryBounds);
+
+    // Xuất GeoJSON
+    document.getElementById('btn-export-geojson').addEventListener('click', () => {
+      const orderedPts = getOrderedPoints();
+      const polygonCoords = orderedPts.map(p => [Number(p.lon.toFixed(6)), Number(p.lat.toFixed(6))]);
+      polygonCoords.push([Number(orderedPts[0].lon.toFixed(6)), Number(orderedPts[0].lat.toFixed(6))]);
+
+      const geojsonData = {
+        type: "FeatureCollection",
+        name: "ranh_gioi_khuon_vien_nghia_trang_nguyen_van_toc",
+        crs: {
+          type: "name",
+          properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" }
+        },
+        features: [
+          {
+            type: "Feature",
+            properties: {
+              name: "Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc",
+              location: "Giáng Đông, Hòa Xuân, Đà Nẵng",
+              origin_point: "Điểm 1 (15.970804, 108.190811)",
+              area_m2: calcPolygonArea(orderedPts),
+              perimeter_m: orderedPts.reduce((acc, p, i) => {
+                const next = orderedPts[(i + 1) % orderedPts.length];
+                return acc + calcDistance(p.lat, p.lon, next.lat, next.lon);
+              }, 0)
+            },
+            geometry: {
+              type: "Polygon",
+              coordinates: [polygonCoords]
+            }
+          },
+          ...POINTS.map(p => ({
+            type: "Feature",
+            properties: {
+              id: p.id,
+              name: p.name,
+              dms: p.dms,
+              dx_m: Number(p.x.toFixed(3)),
+              dy_m: Number(p.y.toFixed(3)),
+              is_origin: p.id === 1
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [Number(p.lon.toFixed(6)), Number(p.lat.toFixed(6))]
+            }
+          }))
+        ]
+      };
+
+      downloadFile(JSON.stringify(geojsonData, null, 2), "ranh_gioi_khuon_vien_nghia_trang_nguyen_van_toc.geojson", "application/geo+json");
+    });
+
+    // Xuất KML
+    document.getElementById('btn-export-kml').addEventListener('click', () => {
+      const orderedPts = getOrderedPoints();
+      let kmlCoords = orderedPts.map(p => `${p.lon.toFixed(6)},${p.lat.toFixed(6)},0`).join(" ");
+      kmlCoords += ` ${orderedPts[0].lon.toFixed(6)},${orderedPts[0].lat.toFixed(6)},0`;
+
+      let placemarks = POINTS.map(p => `
+    <Placemark>
+      <name>${p.name}</name>
+      <description>ΔX: ${p.x.toFixed(2)}m, ΔY: ${p.y.toFixed(2)}m | ${p.dms}</description>
+      <Point>
+        <coordinates>${p.lon.toFixed(6)},${p.lat.toFixed(6)},0</coordinates>
+      </Point>
+    </Placemark>`).join("");
+
+      const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc</name>
+    <Placemark>
+      <name>Ranh Giới Thửa Đất</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>${kmlCoords}</coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    ${placemarks}
+  </Document>
+</kml>`;
+
+      downloadFile(kmlContent, "ranh_gioi_khuon_vien_nghia_trang_nguyen_van_toc.kml", "application/vnd.google-earth.kml+xml");
+    });
+
+    function downloadFile(content, fileName, contentType) {
+      const blob = new Blob([content], { type: contentType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Đã xuất file ${fileName}`);
+    }
+
+    window.addEventListener('DOMContentLoaded', initMap);
+  </script>
+</body>
+</html>
