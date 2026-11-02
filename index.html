@@ -660,14 +660,12 @@
   <!-- Header -->
   <header>
     <div class="brand">
-      <div class="brand-icon">GIS</div>
       <div class="brand-title">
         <h1>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc</h1>
         <p>Giáng Đông, Hòa Xuân, Đà Nẵng</p>
       </div>
     </div>
     <div class="header-actions">
-      <span class="badge-crs">7 Điểm Mốc Tọa Độ</span>
       <button class="btn btn-primary" id="btn-toggle-sidebar" title="Mở bảng tọa độ">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
@@ -675,12 +673,6 @@
           <path d="m9 14 2 2 4-4"/>
         </svg>
         <span>Số liệu</span>
-      </button>
-      <button class="btn btn-outline" id="btn-fit-bounds" title="Căn chỉnh toàn cảnh">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-        </svg>
-        Toàn cảnh
       </button>
     </div>
   </header>
@@ -825,25 +817,10 @@
     let markersLayer = L.layerGroup();
     let edgeLabelsLayer = L.layerGroup();
 
-    // Map base layers
+    // Bản đồ nền vệ tinh duy nhất (Google Maps Hybrid)
     const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
       maxZoom: 22,
       attribution: '&copy; Google Maps'
-    });
-
-    const googleRoad = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-      maxZoom: 22,
-      attribution: '&copy; Google Maps'
-    });
-
-    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 19,
-      attribution: '&copy; Esri World Imagery'
-    });
-
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
     });
 
     // Hàm tính khoảng cách Geodesic
@@ -890,13 +867,7 @@
         layers: [googleHybrid]
       });
 
-      const baseMaps = {
-        "Google Vệ Tinh (Hybrid)": googleHybrid,
-        "Google Bản Đồ (Streets)": googleRoad,
-        "Esri World Imagery": esriSat,
-        "OpenStreetMap (OSM)": osm
-      };
-      L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+
       L.control.scale({ imperial: false, metric: true, position: 'bottomleft' }).addTo(map);
 
       markersLayer.addTo(map);
@@ -1126,8 +1097,6 @@
     document.getElementById('toggle-markers').addEventListener('change', renderMarkers);
     document.getElementById('toggle-labels').addEventListener('change', renderMarkers);
     document.getElementById('toggle-edge-lengths').addEventListener('change', updateBoundary);
-
-    document.getElementById('btn-fit-bounds').addEventListener('click', fitBoundaryBounds);
 
     // Xuất GeoJSON
     document.getElementById('btn-export-geojson').addEventListener('click', () => {
