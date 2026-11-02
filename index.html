@@ -466,51 +466,30 @@
 
     @media (max-width: 768px) {
       header {
-        padding: 8px 12px;
+        padding: 10px 16px;
       }
 
       .brand {
-        gap: 8px;
+        width: 100%;
         min-width: 0;
-        flex: 1;
-      }
-
-      .brand-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-        flex-shrink: 0;
       }
 
       .brand-title {
-        min-width: 0;
+        width: 100%;
       }
 
       .brand-title h1 {
-        font-size: 13px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 14px;
+        line-height: 1.35;
+        white-space: normal;
+        word-break: normal;
       }
 
       .brand-title p {
-        font-size: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .badge-crs {
-        display: none;
-      }
-
-      .btn {
-        padding: 6px 10px;
-        font-size: 12px;
-      }
-
-      #btn-toggle-sidebar {
-        display: inline-flex;
+        font-size: 11px;
+        margin-top: 2px;
+        color: #94a3b8;
+        white-space: normal;
       }
 
       .app-body {
@@ -664,16 +643,6 @@
         <h1>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc</h1>
         <p>Giáng Đông, Hòa Xuân, Đà Nẵng</p>
       </div>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-primary" id="btn-toggle-sidebar" title="Mở bảng tọa độ">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-          <rect x="9" y="3" width="6" height="4" rx="1"/>
-          <path d="m9 14 2 2 4-4"/>
-        </svg>
-        <span>Số liệu</span>
-      </button>
     </div>
   </header>
 
@@ -1200,7 +1169,6 @@
     }
 
         // Mobile toggle handlers
-    document.getElementById('btn-toggle-sidebar').addEventListener('click', openSidebar);
     document.getElementById('btn-floating-sidebar').addEventListener('click', openSidebar);
     document.getElementById('btn-close-sidebar').addEventListener('click', closeSidebar);
     document.getElementById('sidebar-backdrop').addEventListener('click', closeSidebar);
