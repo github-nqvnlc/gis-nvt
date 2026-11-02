@@ -36,3 +36,4 @@ Hệ thống WebGIS hiển thị ranh giới 7 đỉnh mốc khuôn viên nghĩa
 - `coordinates.geojson`: Dữ liệu không gian định dạng GeoJSON chuẩn GIS.
 - `so-do.pdf`: File sơ đồ trích lục đo đạc gốc.
 - `wrangler.jsonc`: Cấu hình deploy tự động lên Cloudflare Workers (Static Assets).
+

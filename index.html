@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Ranh Giới Khuôn Viên Nghĩa Trang Nguyễn Văn Tộc - Giáng Đông, Hòa Xuân, Đà Nẵng</title>
   
   <!-- Leaflet CSS -->
@@ -438,6 +438,221 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+  
+    /* --- Mobile Responsive Enhancements --- */
+    .sidebar-mobile-header {
+      display: none;
+    }
+
+    .mobile-floating-bar {
+      display: none;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+    }
+
+    #btn-toggle-sidebar {
+      display: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 8px 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .brand-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .brand-title {
+        min-width: 0;
+      }
+
+      .brand-title h1 {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brand-title p {
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .badge-crs {
+        display: none;
+      }
+
+      .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      #btn-toggle-sidebar {
+        display: inline-flex;
+      }
+
+      .app-body {
+        height: calc(100vh - 50px);
+        overflow: hidden;
+      }
+
+      /* Sidebar off-canvas drawer */
+      aside {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 88%;
+        max-width: 360px;
+        height: 100vh;
+        z-index: 2000;
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+      }
+
+      aside.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 1999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+
+      .sidebar-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .sidebar-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background-color: #0f172a;
+        color: white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-mobile-title {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+
+      .sidebar-mobile-title span:first-child {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .sidebar-mobile-title span:last-child {
+        font-size: 11px;
+        color: #94a3b8;
+      }
+
+      .btn-close-sidebar {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .btn-close-sidebar:active {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .points-list {
+        max-height: none;
+      }
+
+      .coords-bar {
+        display: none;
+      }
+
+      /* Floating action bar on mobile */
+      .mobile-floating-bar {
+        display: flex;
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        gap: 8px;
+        padding: 5px;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn-floating {
+        padding: 9px 16px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .btn-floating:active {
+        background: #1d4ed8;
+      }
+
+      .btn-floating.icon-only {
+        padding: 0;
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+      }
+      .btn-floating.icon-only:active {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -453,6 +668,14 @@
     </div>
     <div class="header-actions">
       <span class="badge-crs">7 Điểm Mốc Tọa Độ</span>
+      <button class="btn btn-primary" id="btn-toggle-sidebar" title="Mở bảng tọa độ">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <path d="m9 14 2 2 4-4"/>
+        </svg>
+        <span>Số liệu</span>
+      </button>
       <button class="btn btn-outline" id="btn-fit-bounds" title="Căn chỉnh toàn cảnh">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
@@ -466,6 +689,14 @@
   <div class="app-body">
     <!-- Sidebar -->
     <aside>
+      <!-- Mobile Drawer Header -->
+      <div class="sidebar-mobile-header">
+        <div class="sidebar-mobile-title">
+          <span>Thông Số & Tọa Độ</span>
+          <span>(7 Điểm Mốc)</span>
+        </div>
+        <button class="btn-close-sidebar" id="btn-close-sidebar" title="Đóng bảng">✕</button>
+      </div>
       <!-- Thống kê diện tích & chu vi -->
       <div class="panel-section">
         <div class="panel-title">
@@ -547,6 +778,26 @@
     <div class="coords-bar" id="mouse-coords">
       Lat: --.---- | Lon: ---.---- | Zoom: --
     </div>
+
+    <!-- Mobile Floating Action Bar -->
+    <div class="mobile-floating-bar" id="mobile-floating-bar">
+      <button class="btn-floating" id="btn-floating-sidebar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <path d="m9 14 2 2 4-4"/>
+        </svg>
+        <span>Xem 7 Điểm Mốc</span>
+      </button>
+      <button class="btn-floating icon-only" id="btn-floating-fit" title="Toàn cảnh">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Backdrop for Mobile Drawer -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
   </div>
 
   <!-- Toast -->
@@ -830,6 +1081,20 @@
 
     function zoomToPoint(lat, lon) {
       map.flyTo([lat, lon], 21, { duration: 0.8 });
+      if (window.innerWidth <= 768) {
+        closeSidebar();
+      }
+    }
+
+    // Sidebar Mobile Drawer Controls
+    function openSidebar() {
+      document.querySelector('aside').classList.add('open');
+      document.getElementById('sidebar-backdrop').classList.add('active');
+    }
+
+    function closeSidebar() {
+      document.querySelector('aside').classList.remove('open');
+      document.getElementById('sidebar-backdrop').classList.remove('active');
     }
 
     function copyCoord(text) {
@@ -964,6 +1229,17 @@
       URL.revokeObjectURL(url);
       showToast(`Đã xuất file ${fileName}`);
     }
+
+        // Mobile toggle handlers
+    document.getElementById('btn-toggle-sidebar').addEventListener('click', openSidebar);
+    document.getElementById('btn-floating-sidebar').addEventListener('click', openSidebar);
+    document.getElementById('btn-close-sidebar').addEventListener('click', closeSidebar);
+    document.getElementById('sidebar-backdrop').addEventListener('click', closeSidebar);
+    document.getElementById('btn-floating-fit').addEventListener('click', fitBoundaryBounds);
+
+    window.addEventListener('resize', () => {
+      if (map) map.invalidateSize();
+    });
 
     window.addEventListener('DOMContentLoaded', initMap);
   </script>
